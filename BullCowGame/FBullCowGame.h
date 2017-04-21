@@ -1,11 +1,11 @@
-/* a lógica do jogo (sem código de interface de usuário ou interação direta com o usuário). 
-O jogo é simplesmente tentar acertar a palavra secreta dentro de um limite de tentativas
+/* The game logic (no view code or direct user interaction)
+The game is a simple guess the word game based on Mastermind
 */
 
 #pragma once
 #include <string>
 
-// adaptando a sintaxe utilizad na Unreal Engine
+// to make syntax Unreal friendly
 using FString = std::string;
 using int32 = int;
 
@@ -24,7 +24,7 @@ enum class EGuessStatus {
 
 class FBullCowGame {
 public:
-	FBullCowGame(); // construtor
+	FBullCowGame(); // constructor
 
 	int32 GetMaxTries() const;
 	int32 GetCurrentTry() const;
@@ -41,6 +41,7 @@ public:
 	void SetMyGameLevel(int32);
 
 private:
+	// see constructor for initialisation
 	int32 MyCurrentTry;
 	int32 MyGameLevel;
 	FString MyHiddenWord;

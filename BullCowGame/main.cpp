@@ -1,6 +1,6 @@
-/* Este é um aplicativo de console, que faz uso da classe BullCow
-Este arquivo atua como a view no padrão MVC, e é responsável por toda a
-interação com o usuário. Para ver a lógica do jogo veja a classe FBullCowGame.
+/* This is the console executable, that makes use of the BullCow class
+This acts as the view in a MVC pattern, and is responsible for all
+user interaction. For game logic see the FBullCowGame class.
 */
 #pragma once
 
@@ -9,12 +9,12 @@ interação com o usuário. Para ver a lógica do jogo veja a classe FBullCowGame.
 #include "FBullCowGame.h"
 #include <map>
 
-// adaptando a sintaxe utilizad na Unreal Engine
+// to make syntax Unreal friendly
 using FText = std::string;
 using int32 = int;
 #define TMap std::map
 
-// protótipos das funções utilizadas fora da classe do jogo
+// instantiate a new game, which we re-use across plays
 void PrintIntro();
 void PlayGame();
 FText GetValidGuess();
@@ -26,7 +26,7 @@ FBullCowGame BCGame; // instanciando um novo jogo
 
 TMap<int32, FString> GameDifficultyText{ { 1, "Easy" },{ 2, "Normal" },{ 3, "Hard" } }; // mapa com as definições de levels
 
-// ponto de inicial da aplicação
+																						// the entry point for our application
 int main() {
 
 	do {
@@ -37,8 +37,6 @@ int main() {
 
 	return 0;
 }
-
-
 
 void PrintIntro() {
 
@@ -54,6 +52,7 @@ void PrintIntro() {
 	return;
 }
 
+// plays a single game to completion
 void PlayGame() {
 
 	BCGame.Reset();
@@ -70,12 +69,12 @@ void PlayGame() {
 	
 	std::cout << "Max Tries: " << MaxTries << std::endl;
 
-	// continua perguntando os palpites do jogador
-	// até que ele acerte a palavra ou esgote o numero de tentativas
+	// loop asking for guesses while the game
+	// is NOT won and there are still tries remaining
 	while (!BCGame.isGameWon() && BCGame.GetCurrentTry() < MaxTries) {
 		FText Guess = GetValidGuess(); 
 
-		// verifica e valida o palpite do usuário e retorna a contagem de Bulls e Cows
+		// submit valid guess to the game, and receive counts
 		FBullCowCount BullCowCount = BCGame.SubmitValidGuess(Guess);
 		
 		std::cout << "Bulls = " << BullCowCount.Bulls;
@@ -87,18 +86,19 @@ void PlayGame() {
 	return;
 }
 
+// loop continually until the user gives a valid guess
 FText GetValidGuess() {
 	FText Guess = "";
 	EGuessStatus Status = EGuessStatus::Invalid_Status;
 	do {
-		// pega o palpite do usuário
+		// get a guess from the player
 		int32 CurrentTry = BCGame.GetCurrentTry();
 		
 		std::cout << "Try " << CurrentTry << " of " << BCGame.GetMaxTries();
 		std::cout << " . Enter your guess: ";
 		std::getline(std::cin, Guess);
 
-		// checa se o palpite é válido
+		// check status and give feedback
 		Status = BCGame.CheckGuesValidity(Guess);
 		switch (Status) {
 		case EGuessStatus::Wrong_Length:
@@ -111,9 +111,10 @@ FText GetValidGuess() {
 			std::cout << "Please enter a word without repeat letters.\n\n";
 			break;
 		default:
+			// assume the guess is valid
 			break;
 		}
-	} while (Status != EGuessStatus::OK); // continua perguntando ao usuário o palpite enquanto ele for inválido
+	} while (Status != EGuessStatus::OK); // keep looping until we get no errors
 	return Guess;
 }
 
