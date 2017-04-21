@@ -63,7 +63,7 @@ void PlayGame() {
 	std::cout << "Game Difficulty: " << GameDifficultyText[BCGame.GetMyGameLevel()] << "\n\n";
 
 	std::cout << "Can you guess the letter " << BCGame.GetHiddenWordLength();
-	std::cout << " isogram I'm thinking of? " << "**" << BCGame.GetMyHiddenWord() << "**\n";
+	std::cout << " isogram I'm thinking of?\n";
 
 	int32 MaxTries = BCGame.GetMaxTries();
 	
